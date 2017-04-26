@@ -3,6 +3,8 @@ var bodyParser = require("body-parser");
 var path = require("path");
 var app = express();
 
+app.set('port', (process.env.PORT || 5000));
+
 app.use(express.static(__dirname + '/views'));
 
 var router = express.Router();
@@ -21,7 +23,7 @@ router.route('/:date')
         if (!Number.isNaN(Number(rawDate))) {
           rawDate = Number(rawDate) * 1000;
         }
-        
+
         var formattedDate = null;
         var unixDate = null;
         var date = new Date(rawDate);
@@ -32,9 +34,9 @@ router.route('/:date')
         formattedDate = month + ' ' + day + ', ' + year;
         unixDate = date.getTime() / 1000;
         }
-        
+
         res.json({unix: unixDate, natural: formattedDate});
-        
+
     });
 
 
@@ -44,6 +46,6 @@ app.get('/', function (req, res) {
  res.sendFile('index.html', { root: __dirname + '/views' });
 })
 
-app.listen(8080, function () {
-  console.log('Example app listening on port 8080!')
+app.listen(app.get('port'), function () {
+  console.log('Example app listening on', app.get('port'))
 })
